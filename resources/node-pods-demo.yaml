@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-node-pod-1
+  namespace: demo
+  labels:
+    app: demo-node-pod
+spec:
+  nodeSelector:
+    demo-node: "true"
+  containers:
+  - name: busybox
+    image: busybox
+    command: ["sh", "-c", "echo 'This is demo node pod 1 on node with label demo-node=true' && sleep 3600"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-node-pod-2
+  namespace: demo
+  labels:
+    app: demo-node-pod
+spec:
+  nodeSelector:
+    demo-node: "true"
+  containers:
+  - name: busybox
+    image: busybox
+    command: ["sh", "-c", "echo 'This is demo node pod 2 on node with label demo-node=true' && sleep 3600"]

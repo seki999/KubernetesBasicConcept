@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-deployment
+  namespace: test
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: python
+  template:
+    metadata:
+      labels:
+        app: python
+    spec:
+      containers:
+      - name: python
+        image: python:3.9-slim
+        # 使用 Python 内置 HTTP 服务器展示应用，监听 8000 端口
+        command: ["python", "-m", "http.server", "8000"]
+        env:
+        - name: APP_MODE
+          valueFrom:
+            configMapKeyRef:
+              name: test-config
+              key: APP_MODE
+        - name: WELCOME_MESSAGE
+          valueFrom:
+            configMapKeyRef:
+              name: test-config
+              key: WELCOME_MESSAGE
+        - name: USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: test-secret
+              key: username
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: test-secret
+              key: password
+        ports:
+        - containerPort: 8000
